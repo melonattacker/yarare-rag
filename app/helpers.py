@@ -63,14 +63,6 @@ def save_memo(mid: str, uid: str, body: str, visibility: str, password: str | No
         (mid, uid, body, visibility, password)
     )
 
-# 簡易コサイン類似度計算
-def _cosine(a: list[float], b: list[float]) -> float:
-    """簡易コサイン類似度"""
-    dot = sum(x*y for x, y in zip(a, b))
-    na = math.sqrt(sum(x*x for x in a)) + 1e-8
-    nb = math.sqrt(sum(y*y for y in b)) + 1e-8
-    return dot / (na * nb)
-
 # 類似メモを取得
 def get_related_memos(base_memo_id: str, limit: int = 1) -> list[dict]:
     """
