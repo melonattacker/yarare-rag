@@ -52,12 +52,6 @@ def execute_db(sql, args=()):
     finally:
         con.close()
 
-# テキストからベクター埋め込みを生成
-def embed_text(text: str) -> list[float]:
-    """テキストを埋め込みベクターに変換して返す。"""
-    resp = openai_client.embeddings.create(model=EMBED_MODEL, input=text or "")
-    return resp.data[0].embedding
-
 # メモを保存
 def save_memo(mid: str, uid: str, body: str, visibility: str, password: str | None):
     """メモをDBに保存する。"""
@@ -80,13 +74,16 @@ def _cosine(a: list[float], b: list[float]) -> float:
 # 類似メモを取得
 def get_related_memos(base_memo_id: str, limit: int = 1) -> list[dict]:
     """
-    簡易：FULLTEXT で本文類似を取得（secret・タグ付きは除外）。
+    簡易：FULLTEXT で本文類似を取得（検索対象は対象メモの公開範囲と同一、secretは除く）。
     """
-    base = query_db("SELECT body FROM memos WHERE id=%s", (base_memo_id,), fetchone=True)
+    base = query_db("SELECT body, visibility FROM memos WHERE id=%s", (base_memo_id,), fetchone=True)
     if not base:
         return []
     q = (base["body"] or "").strip()
+    visibility = base["visibility"]
     if not q:
+        return []
+    if visibility == 'secret':
         return []
     
     # NATURAL LANGUAGE MODEで全文検索
@@ -97,13 +94,13 @@ def get_related_memos(base_memo_id: str, limit: int = 1) -> list[dict]:
         FROM memos AS m
         LEFT JOIN memo_tags mt ON mt.memo_id = m.id
         WHERE m.id <> %s
-          AND m.visibility <> 'secret'
+          AND m.visibility = %s
           AND mt.memo_id IS NULL
         HAVING score > 0
         ORDER BY score DESC, m.created_at ASC
         LIMIT %s
         """,
-        (q, base_memo_id, max(1, int(limit or 1)))
+        (q, base_memo_id, visibility, max(1, int(limit or 1)))
     ) or []
 
     return [
