@@ -219,7 +219,7 @@ def memo_delete(mid):
     return redirect(f"/users/{uid}")
 
 # タグ検索
-@app.route('/search/tag')
+@app.route('/tag/search')
 def search_by_tag():
     """タグ名でメモを検索し、結果を表示する。"""
     uid = session.get('user_id')
