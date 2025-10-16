@@ -1,0 +1,8 @@
+Flask==3.1.1
+uWSGI==2.0.23
+PyMySQL==1.1.1
+openai==1.86.0
+cryptography==45.0.4
+Flask-Limiter[redis]==3.12
+markdown==3.9
+bleach==6.2.0

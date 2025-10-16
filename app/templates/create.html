@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>メモの作成</h1>
+<form method="post" id="memoForm">
+    <div class="mb-3">
+        <textarea name="body" id="memoBody" class="form-control" rows="8" placeholder="Markdown でメモを書けます（**太字**、`code`、- list など）"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">公開範囲</label>
+        <select name="visibility" class="form-select">
+            <option value="public">公開</option>
+            <option value="private">非公開</option>
+            <option value="secret">パスワード付き</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <input name="password" class="form-control" placeholder="パスワード（パスワード付きの場合）">
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="enableTags" name="enable_tags">
+        <label class="form-check-label" for="enableTags">タグを自動生成する</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">作成</button>
+</form>
+
+<hr class="my-4">
+<h5>プレビュー</h5>
+<div id="preview" class="border rounded p-3" style="min-height:120px;"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.7/dist/purify.min.js"></script>
+<script>
+  const textarea = document.getElementById('memoBody');
+  const preview  = document.getElementById('preview');
+
+  function renderPreview() {
+    const src = textarea.value || "";
+    const html = marked.parse(src);
+    preview.innerHTML = DOMPurify.sanitize(html);
+  }
+  textarea.addEventListener('input', renderPreview);
+  // 初期表示
+  renderPreview();
+</script>
+{% endblock %}

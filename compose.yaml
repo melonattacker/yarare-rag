@@ -1,0 +1,58 @@
+services:
+  web:
+    build: ./app
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=memo-rag
+      - MYSQL_PASSWORD=dummy_pass
+      - MYSQL_DATABASE=memodb
+      - SESSION_SECRET=dummy_session_secret
+      - SUPER_ADMIN_USER_ID=dummy_super_admin_id
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 33456:80
+    depends_on:
+      - web
+    restart: always
+
+  mysql:
+    image: mysql:9.2
+    environment:
+      MYSQL_ROOT_PASSWORD: dummy_root_pass
+      MYSQL_DATABASE: memodb
+      MYSQL_USER: memo-rag
+      MYSQL_PASSWORD: dummy_pass
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+  redis:
+    image: redis:8-alpine
+    volumes:
+      - redis:/data
+    restart: always
+
+  bot:
+    build: ./bot
+    restart: unless-stopped
+    init: true
+    ports:
+      - 1337:1337
+    environment:
+      - SUPER_ADMIN_USER=super-admin
+      - SUPER_ADMIN_PASS=dummy_super_admin_pass
+
+volumes:
+  redis:

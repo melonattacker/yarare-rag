@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>メモ検索</h1>
+<form method="post">
+  <input name="query" class="form-control mb-3" placeholder="例: 沖縄で予約したのは？" value="{{ query or '' }}">
+  <input name="user_id" class="form-control mb-3" placeholder="追加で検索するユーザーID（任意・1人まで）" value="{{ other_user_id or '' }}">
+  <button class="btn btn-primary" type="submit">検索</button>
+</form>
+
+
+{% if answer_html %}
+<div class="card my-4">
+  <div class="card-header">質問への回答</div>
+  <div class="card-body">
+    {{ answer_html|safe }}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

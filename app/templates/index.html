@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>メモ一覧</h1>
+
+<div class="alert alert-secondary mb-4">
+  <strong>ユーザー名:</strong> {{ username }} <br>
+  <strong>ユーザーID:</strong> {{ user_id }}
+</div>
+
+<ul class="list-group">
+    {% for memo in memos %}
+    <li class="list-group-item">
+        <a href="/memo/{{ memo.id }}">
+            {{ memo.body[:30] }}{% if memo.body|length > 30 %}...{% endif %}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>ユーザー登録</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">ユーザー名</label>
+        <input type="text" name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">パスワード</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">登録</button>
+    <a href="/login" class="btn btn-link">ログインはこちら</a>
+</form>
+{% endblock %}
