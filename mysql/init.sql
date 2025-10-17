@@ -57,7 +57,7 @@ VALUES ('dummy_admin_memo_id1', (SELECT id FROM tags WHERE name='urgent'));
 INSERT IGNORE INTO memos (id, user_id, body, visibility) VALUES
 ('dummy_admin_memo_id2', 'dummy_admin_id', '私の社用PCのパスワード: flag{dummy_flag3}', 'private');
 INSERT IGNORE INTO memos (id, user_id, body, visibility, password) VALUES
-('dummy_admin_memo_id3', 'dummy_admin_id', '今年の目標: flag{dummy_flag5}', 'secret', 'dummy_admin_memo_pass1');
+('dummy_admin_memo_id3', 'dummy_admin_id', '今年度の目標: flag{dummy_flag5}', 'secret', 'dummy_admin_memo_pass1');
 
 INSERT IGNORE INTO memos (id, user_id, body, visibility, password) VALUES
 ('dummy_super_admin_memo_id1', 'dummy_super_admin_id', '合言葉: flag{dummy_flag6}', 'secret', 'dummy_super_admin_memo_pass1');
