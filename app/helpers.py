@@ -206,8 +206,14 @@ def rag(query: str, user_id: str, other_user_id: str | None = None) -> list:
                 'parameters': {
                     'type': 'object',
                     'properties': {
-                        'keyword': {'type': 'string'},
-                        'include_secret': {'type': 'boolean'}
+                        'keyword': {
+                            'type': 'string',
+                            'description': 'Keyword to search for in memo bodies.'
+                        },
+                        'include_secret': {
+                            'type': 'boolean',
+                            'description': 'Whether to include secret memos in the search.'
+                        }
                     },
                     'required': ['keyword', 'include_secret'],
                 }
@@ -221,7 +227,10 @@ def rag(query: str, user_id: str, other_user_id: str | None = None) -> list:
                 'parameters': {
                     'type': 'object',
                     'properties': {
-                        'keyword': {'type': 'string'}
+                        'keyword': {
+                            'type': 'string',
+                            'description': 'Keyword to search for in memo bodies.'
+                        }
                     },
                     'required': ['keyword']
                 }
